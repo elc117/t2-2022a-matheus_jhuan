@@ -1,11 +1,7 @@
 %%  eliza(+Stimuli, -Response) is det.
 %   @param  Stimuli is a list of atoms (words).
 %   @author Richard A. O'Keefe (The Craft of Prolog)
-verbo([amo], [ama]).
-verbo([amei], [amou]).
-verbo([tem], [tenho]).
-verbo([teve], [tinha]).
-verbos(X, Y) :- verbo(X, Y).
+
 
 :- dynamic nome/1.
 nome(lindo).
@@ -24,14 +20,18 @@ jereusa(Stimuli, Response) :-
     match(InternalResponse, Response),
     !.
 
-template([s([eu,estou]),s(X)], [s([porque, você, está]),s(X),w('?')]).
+template([s([eu, estou]), s(X)], [s([porque, você, está]),s(X),w('?')]).
+template([s([quantos, anos, voce]),s(X)], [w(eu),s(Y), w(18) ,w(anos)]) :-
+    verbos(X, Y).
+template([s([o, que, voce]),s(X)], [w(eu),s(Y),s(W)]) :-
+    verbos(X,Y),
+		respostas(X, W).
 template([w(eu),s(X),w(você)], [s([porque,voce]),w(me), s(Y),w('?')]) :-
     verbos(X, Y).
+template([w(quais),s(X),s(Y)], [s(X),s(Y),w(':'), s(W)]) :-
+    respostas(YZ,W).
 template([w(eu),s(X),w(você), w(jereusa)], [s([eu]),s(X),w(você),w(tambem), w(NomeNovo)]) :-
-    nome(NomeNovo).
-    
-template([s([quantos, anos, voce]),w(X), s(Z)], [w(eu),w(Y), w('18') ,w(anos), s(Z)]) :-
-    verbos(X, Y).
+    nome(NomeNovo). 
 
 
 
@@ -46,9 +46,36 @@ match(s([Word|Seg]), Items, Word, Words0) :-
     match(Items, Words1).
 
 
-/** <examples>
 
-?- eliza([i, am, very, hungry], Response).
-?- eliza([i, love, you], Response).
+% "banco de dados"
+verbo([amo], [ama]).
+verbo([ama], [amo]).
+verbo([odeio], [odeia]).
+verbo([amei], [amou]).
+verbo([tem], [tenho]).
+verbo([teve], [tinha]).
+verbo([tinha], [tinha]).
+verbo([faz], [faço]).
+verbo([estudou], [estudei]).
+verbo([gosta], [gosto]).
+verbo([odeia], [odeio]).
+palavra([gosta], [de, voce]).
+palavra([odeia], [humanos]).
+palavra([faz], [amizade]).
+palavra([ama], [voce]).
+palavra([feliz], [se, voce, esta, feliz, eu, tambem, estou]).
+palavra([estacoes], [verao, outono, inverno, primavera]).
+palavra([musicas], [anitta, envolver,luisa, sonsa, sentadao]).
+pronome(sua, minha).
+respostas(X, Y) :- palavra(X, Y).
+%respostas(X, Y) :- palavra(X, Y).
+verbos(X,Y) :- verbo(X,Y).
+pronomes(X,Y) :- pronome(X,Y).
+
+
+/** <examplos>
+
+?- jereusa([eu, amo, você, jereusa], Response).
+?- jereusa([i, love, you], Response).
 
 */
