@@ -15,11 +15,11 @@
 nome(lindo).
 
 
-jereusa([meu, nome, eh, NomeNovo], Response) :-
+jereusa([meu, nome, é, NomeNovo], Response) :-
     nome(NomeAtual),
     retract(nome(NomeAtual)),
     assert(nome(NomeNovo)),
-    Response = [oi, NomeNovo],
+    Response = [oi, NomeNovo, meu, nome, é, jereusa],
     !.
 
 jereusa(Stimuli, Response) :-
@@ -30,7 +30,9 @@ jereusa(Stimuli, Response) :-
 
 
 
-template([s([eu, estou]), s(X)], [s([porque, você, está]),s(X),w('?')]).
+template([w(eu), s(Y), s(X)], [s([porque, você]), s(K), s(Z),w('?')]) :-
+         pronomes(Y,K),
+    		verbos(X,Z).		
 template([s([quantos, anos, voce]),s(X), s(_)], [w(eu),s(Y), w(18) ,w(anos)]) :-
     verbos(X, Y).
 template([s([o, que, voce]),s(X), s(_)], [w(eu),s(Y),s(W)]) :-
@@ -95,6 +97,10 @@ palavra([musica], [anitta, envolver]).
 pronome([sua], [minha]).
 pronome([suas], [minhas]).
 pronome([minha], [sua]).
+pronome([me], [se]).
+pronome([te], [me]).
+
+% "funções"
 respostas(X, Y) :- palavra(X, Y).
 verbos(X,Y) :- verbo(X,Y).
 pronomes(X,Y) :- pronome(X,Y).
