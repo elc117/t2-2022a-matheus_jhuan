@@ -51,6 +51,8 @@ template([w(_),s(X),s(Y), s(K)], [s(C),s(Y),s(K), w(':'), s(W)]) :-
 template([w(eu), s(Y), s(X)], [s([porque, você]), s(K), s(Z),w('?')]) :-
     pronomes(Y,K),
     	verbos(X,Z).
+template([w(eu), s(X), s(Y)], [s([porque, você]), s(Z), s(Y),w('?')]) :-
+    verbos(X,Z).
 template([w(eu),s(X),w(voce), w(jereusa)], [s([eu]),s(X),w(você),w(tambem), w(NomeNovo)]) :-
     nome(NomeNovo). 
 
@@ -71,6 +73,8 @@ match(s([Word|Seg]), Items, Word, Words0) :-
 
 % "banco de dados"
 verbo([amo], [ama]).
+verbo([mora], [moro]).
+verbo([estou], [esta]).
 verbo([acha], [acho]).
 verbo([ama], [amo]).
 verbo([odeio], [odeia]).
@@ -90,7 +94,6 @@ palavra([ama], [voce]).
 palavra([comigo], [com, voce]).
 palavra([acha], [interessante]).
 palavra([lugar], [no, topo, mais, alto]).
-palavra([feliz], [se, voce, esta, feliz, eu, tambem, estou]).
 palavra([estacoes], [verao, outono, inverno, primavera]).
 palavra([musicas], [anitta, envolver,luisa, sonsa, sentadao]).
 palavra([musica], [anitta, envolver]).
