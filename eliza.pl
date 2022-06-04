@@ -23,7 +23,7 @@ jereusa(Stimuli, Response) :-
 template([s([eu, estou]), s(X)], [s([porque, você, está]),s(X),w('?')]).
 template([s([quantos, anos, voce]),s(X)], [w(eu),s(Y), w(18) ,w(anos)]) :-
     verbos(X, Y).
-template([s([o, que, voce]),s(X)], [w(eu),s(Y),s(W)]) :-
+template([s([o, que, voce]),s(X), s(_)], [w(eu),s(Y),s(W)]) :-
     verbos(X,Y),
 		respostas(X, W).
 template([w(eu),s(X),w(você)], [s([porque,voce]),w(me), s(Y),w('?')]) :-
@@ -34,6 +34,7 @@ template([w(_),s(X),s(Y), s(K)], [s(X),s(Y),s(K), w(':'), s(W)]) :-
     respostas(Y,W).
 template([w(eu),s(X),w(você), w(jereusa)], [s([eu]),s(X),w(você),w(tambem), w(NomeNovo)]) :-
     nome(NomeNovo). 
+
 
 
 
@@ -52,6 +53,7 @@ match(s([Word|Seg]), Items, Word, Words0) :-
 
 % "banco de dados"
 verbo([amo], [ama]).
+verbo([acha], [acho]).
 verbo([ama], [amo]).
 verbo([odeio], [odeia]).
 verbo([amei], [amou]).
@@ -66,6 +68,7 @@ palavra([gosta], [de, voce]).
 palavra([odeia], [humanos]).
 palavra([faz], [amizade]).
 palavra([ama], [voce]).
+palavra([acha], [interessante]).
 palavra([feliz], [se, voce, esta, feliz, eu, tambem, estou]).
 palavra([estacoes], [verao, outono, inverno, primavera]).
 palavra([musicas], [anitta, envolver,luisa, sonsa, sentadao]).
