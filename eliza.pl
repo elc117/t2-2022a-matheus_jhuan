@@ -5,7 +5,7 @@
 
 /** <examplos>
 
-?- jereusa([eu, amo, você, jereusa], Response).
+?- jereusa([eu, amo, voce, jereusa], Response).
 ?- jereusa([quais, sao, minhas, musicas, favoritas], Response).
 
 */
@@ -45,6 +45,9 @@ template([w(quais),s(X),s(Y)], [s(X),s(Y), w(':'), s(W)]) :-
     respostas(Y,W).
 template([w(_),s(X),s(Y), s(K)], [s(X),s(Y),s(K), w(':'), s(W)]) :-
     respostas(Y,W).
+template([w(_),s(X),s(Y), s(K)], [s(C),s(Y),s(K), w(':'), s(W)]) :-
+    respostas(Y,W),
+    	pronomes(X,C).
 template([w(eu),s(X),w(voce), w(jereusa)], [s([eu]),s(X),w(você),w(tambem), w(NomeNovo)]) :-
     nome(NomeNovo). 
 
@@ -89,8 +92,11 @@ palavra([feliz], [se, voce, esta, feliz, eu, tambem, estou]).
 palavra([estacoes], [verao, outono, inverno, primavera]).
 palavra([musicas], [anitta, envolver,luisa, sonsa, sentadao]).
 palavra([musica], [anitta, envolver]).
+pronome([sua], [minha]).
+pronome([suas], [minhas]).
+pronome([minha], [sua]).
 respostas(X, Y) :- palavra(X, Y).
 verbos(X,Y) :- verbo(X,Y).
-
+pronomes(X,Y) :- pronome(X,Y).
 
 
