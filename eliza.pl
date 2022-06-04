@@ -30,9 +30,7 @@ jereusa(Stimuli, Response) :-
 
 
 
-template([w(eu), s(Y), s(X)], [s([porque, você]), s(K), s(Z),w('?')]) :-
-         pronomes(Y,K),
-    		verbos(X,Z).		
+		
 template([s([quantos, anos, voce]),s(X), s(_)], [w(eu),s(Y), w(18) ,w(anos)]) :-
     verbos(X, Y).
 template([s([o, que, voce]),s(X), s(_)], [w(eu),s(Y),s(W)]) :-
@@ -50,6 +48,9 @@ template([w(_),s(X),s(Y), s(K)], [s(X),s(Y),s(K), w(':'), s(W)]) :-
 template([w(_),s(X),s(Y), s(K)], [s(C),s(Y),s(K), w(':'), s(W)]) :-
     respostas(Y,W),
     	pronomes(X,C).
+template([w(eu), s(Y), s(X)], [s([porque, você]), s(K), s(Z),w('?')]) :-
+    pronomes(Y,K),
+    	verbos(X,Z).
 template([w(eu),s(X),w(voce), w(jereusa)], [s([eu]),s(X),w(você),w(tambem), w(NomeNovo)]) :-
     nome(NomeNovo). 
 
@@ -57,10 +58,8 @@ template([w(eu),s(X),w(voce), w(jereusa)], [s([eu]),s(X),w(você),w(tambem), w(N
    
 
 match([],[]).
-
 match([Item|Items],[Word|Words]) :-
     match(Item, Items, Word, Words).
-
 match(w(Word), Items, Word, Words) :-
     match(Items, Words).
 match(s([Word|Seg]), Items, Word, Words0) :-
@@ -84,12 +83,13 @@ verbo([faz], [faço]).
 verbo([estudou], [estudei]).
 verbo([gosta], [gosto]).
 verbo([odeia], [odeio]).
-palavra([gosta], [de, voce]).
+palavra([gosta], [de, fazer, amizade]).
 palavra([odeia], [humanos]).
 palavra([faz], [amizade]).
 palavra([ama], [voce]).
 palavra([comigo], [com, voce]).
 palavra([acha], [interessante]).
+palavra([lugar], [no, topo, mais, alto]).
 palavra([feliz], [se, voce, esta, feliz, eu, tambem, estou]).
 palavra([estacoes], [verao, outono, inverno, primavera]).
 palavra([musicas], [anitta, envolver,luisa, sonsa, sentadao]).
