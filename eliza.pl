@@ -28,8 +28,10 @@ template([s([o, que, voce]),s(X)], [w(eu),s(Y),s(W)]) :-
 		respostas(X, W).
 template([w(eu),s(X),w(você)], [s([porque,voce]),w(me), s(Y),w('?')]) :-
     verbos(X, Y).
-template([w(quais),s(X),s(Y)], [s(X),s(Y),w(':'), s(W)]) :-
-    respostas(YZ,W).
+template([w(quais),s(X),s(Y)], [s(X),s(Y), w(':'), s(W)]) :-
+    respostas(Y,W).
+template([w(_),s(X),s(Y), s(K)], [s(X),s(Y),s(K), w(':'), s(W)]) :-
+    respostas(Y,W).
 template([w(eu),s(X),w(você), w(jereusa)], [s([eu]),s(X),w(você),w(tambem), w(NomeNovo)]) :-
     nome(NomeNovo). 
 
@@ -44,6 +46,7 @@ match(w(Word), Items, Word, Words) :-
 match(s([Word|Seg]), Items, Word, Words0) :-
     append(Seg, Words1, Words0),
     match(Items, Words1).
+
 
 
 
@@ -66,7 +69,9 @@ palavra([ama], [voce]).
 palavra([feliz], [se, voce, esta, feliz, eu, tambem, estou]).
 palavra([estacoes], [verao, outono, inverno, primavera]).
 palavra([musicas], [anitta, envolver,luisa, sonsa, sentadao]).
-pronome(sua, minha).
+palavra([musica], [anitta, envolver]).
+pronome([sua], [minha]).
+pronome([suas], [minhas]).
 respostas(X, Y) :- palavra(X, Y).
 %respostas(X, Y) :- palavra(X, Y).
 verbos(X,Y) :- verbo(X,Y).
