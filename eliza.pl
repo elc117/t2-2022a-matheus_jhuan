@@ -9,7 +9,7 @@
 ?- jereusa([quais, sao, minhas, musicas, favoritas], Response).
 ?- jereusa([mora, comigo, jereusa], Response).
 ?- jereusa([o, que, voce, faz, jereusa], Response).
-?- jereusa([o, que, voce, odeia, jereusa], Response).
+?- jereusa('o que voce odeia jereusa', Response).
 
 */
 
@@ -18,29 +18,25 @@
 nome(lindo).
 
 
-jereusa([meu, nome, é, NomeNovo], Response) :-
+resposta([meu, nome, é, NomeNovo], Response) :-
     nome(NomeAtual),
     retract(nome(NomeAtual)),
     assert(nome(NomeNovo)),
     Response = [oi, NomeNovo, meu, nome, é, jereusa],
     !.
 
-jereusa(Stimuli, Response) :-
-    template(InternalStimuli, InternalResponse),
-    match(InternalStimuli, Stimuli),
-    match(InternalResponse, Response),
-    !.
 
-jereusa_2(Stimuli, Response) :-
+resposta(Stimuli, Response) :-
     template(InternalStimuli, InternalResponse),
     match(InternalStimuli, Stimuli),
     match(InternalResponse, ListResponse),
     atomic_list_concat(ListResponse, ' ', Response),
     !.
+  
 
-linda(Stimuli, Response) :-
+jereusa(Stimuli, Response) :-
     atomic_list_concat(Atomos, ' ', Stimuli),
-    jereusa(Atomos, Response).
+    resposta(Atomos, Response).
 
 		
 template([s([quantos, anos, voce]),s(X), s(_)], [w(eu),s(Y), w(18) ,w(anos)]) :-
@@ -107,7 +103,7 @@ palavra([comigo], [com, voce]).
 palavra([acha], [interessante]).
 palavra([lugar], [na, praia]).
 palavra([estacoes], [verao, outono, inverno, primavera]).
-palavra([musicas], [anitta, envolver,luisa, sonsa, sentadao]).
+palavra([musicas], [anitta, envolver,',', luisa, sonsa, sentadao]).
 palavra([musica], [anitta, envolver]).
 pronome([sua], [minha]).
 pronome([suas], [minhas]).
@@ -119,7 +115,4 @@ pronome([te], [me]).
 respostas(X, Y) :- palavra(X, Y).
 verbos(X,Y) :- verbo(X,Y).
 pronomes(X,Y) :- pronome(X,Y).
-
-%faz write pra juntar listas
-
 
