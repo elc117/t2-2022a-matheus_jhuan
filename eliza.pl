@@ -3,10 +3,13 @@
 %   @author Richard A. O'Keefe (The Craft of Prolog)
 
 
-/** <examplos>
+/** <exemplos>
 
 ?- jereusa([eu, amo, voce, jereusa], Response).
 ?- jereusa([quais, sao, minhas, musicas, favoritas], Response).
+?- jereusa([mora, comigo, jereusa], Response).
+?- jereusa([o, que, voce, faz, jereusa], Response).
+?- jereusa([o, que, voce, odeia, jereusa], Response).
 
 */
 
@@ -93,7 +96,7 @@ palavra([faz], [amizade]).
 palavra([ama], [voce]).
 palavra([comigo], [com, voce]).
 palavra([acha], [interessante]).
-palavra([lugar], [no, topo, mais, alto]).
+palavra([lugar], [na, praia]).
 palavra([estacoes], [verao, outono, inverno, primavera]).
 palavra([musicas], [anitta, envolver,luisa, sonsa, sentadao]).
 palavra([musica], [anitta, envolver]).
@@ -103,9 +106,11 @@ pronome([minha], [sua]).
 pronome([me], [se]).
 pronome([te], [me]).
 
-% "funções"
+% "predicados"
 respostas(X, Y) :- palavra(X, Y).
 verbos(X,Y) :- verbo(X,Y).
 pronomes(X,Y) :- pronome(X,Y).
+
+%faz write pra juntar listas
 
 
