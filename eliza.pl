@@ -80,7 +80,7 @@ match(s([Word|Seg]), Items, Word, Words0) :-
 
 
 
-% "banco de dados"
+% "banco de regras"
 verbo([amo], [ama]).
 verbo([mora], [moro]).
 verbo([estou], [esta]).
@@ -117,6 +117,5 @@ respostas(X, Y) :- palavra(X, Y).
 verbos(X,Y) :- verbo(X,Y).
 pronomes(X,Y) :- pronome(X,Y).
 
-%faz write pra juntar listas
 
 
