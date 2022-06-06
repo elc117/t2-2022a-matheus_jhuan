@@ -6,10 +6,14 @@
 
 :- dynamic object_location/2.
 object_location(egg, pen).
+object_location(bazooka, yard).
 object_location(key, house).
 
 :- dynamic player_location/1.
 player_location(house).
+
+:- dynamic creature_location/2.
+creature_location(zombie, pen).
 
 connected(yard, pen).
 connected(yard, house).
@@ -32,13 +36,22 @@ can_reach(A, B) :-
 
 :- dynamic in_inventory/1.
 
+can_open_a_door(axe).
 can_open_a_door(bazooka).
 can_open_a_door(key).
 can_open_a_door(paperclip).
 
+can_kill_creature(axe).
+can_kill_creature(bazooka).
+
 write_area(Current, LocationToWrite) :-
     is_closed(Current, LocationToWrite),
     write(LocationToWrite), write(' [locked]'), nl,!.
+
+write_area(Current, LocationToWrite) :-
+    is_connected(Current, LocationToWrite),
+    creature_location(Creature, LocationToWrite),
+    write(Creature), write(' is in '), write(LocationToWrite), nl, !.
 
 write_area(Current, LocationToWrite) :-
     is_connected(Current, LocationToWrite),
@@ -63,6 +76,11 @@ write_object(Object) :-
     nl.
 
 write_objects :-
+    player_location(L),
+    findall(Object, object_location(Object, L), []),
+    !. 
+
+write_objects :-
     write('Objects: '),
     nl,
     player_location(L),
@@ -72,6 +90,14 @@ look_around :-
     where_am_i,
     write_areas,
     write_objects.
+
+inventory :-
+    findall(Object, in_inventory(Object), []),
+    write('Inventory is empty'), nl.
+
+inventory :-
+    write('Inventory: '), nl,
+    forall(in_inventory(Object), write_object(Object)).
 
 get_object(Object) :-
     player_location(CurrentLocation),
@@ -90,7 +116,9 @@ get_object(Object) :-
     player_location(CurrentLocation),
     object_location(Object, CurrentLocation),
     retract(object_location(Object, CurrentLocation)),
-    assert(in_inventory(Object)).
+    assert(in_inventory(Object)),
+    write('You obtained '), write(Object),
+    nl.
 
 move(Destination) :-
     player_location(Current),
@@ -99,20 +127,58 @@ move(Destination) :-
   	assert(player_location(Destination)).
 
 goto(X) :-
-    move(X),
-  	write('You are in the '), write(X), nl,
+    player_location(Y),
+    not(is_connected(Y, X)),
+  	write('You can\'t get there from here.'),
+    nl,
+    !.
+goto(X) :-
+    creature_location(_, X),
+    player_location(Y),
+    write_area(Y, X),
     !.
 goto(X) :-
     player_location(Y),
-    is_connected(X, Y),
-    write('The gate is closed'), nl,
+    is_closed(X, Y),
+    write('The door is closed'), nl,
     !.
-goto(_) :-
-  	write('You can\'t get there from here.'), nl.
+goto(X) :-
+    move(X),
+  	write('You are in the '), write(X), nl,
+    !.
+
+kill(Object, _) :-
+    invalid_object(Object), !.
+
+kill(Object, _) :-
+    not(can_kill_creature(Object)),
+    write('This object cannot kill anything'),
+    !.
+
+kill(_, Target) :-
+    player_location(PlayerLocation),
+    creature_location(Target, L),
+    not(can_reach(PlayerLocation, L)),
+    write('You can\'t reach it'),
+    nl,
+    !.
+
+kill(_, Target) :-
+    not(creature_location(Target, _)),
+    write(Target),
+    write(' is not around'),
+    nl,
+    !.
+
+kill(_, Target) :-
+    creature_location(Target, L),
+    retract(creature_location(Target, L)),
+    write('You killed the '), write(Target),
+    nl.
 
 do_open(A, B) :-
   	(retract(closed(A, B)); retract(closed(B, A))),
-	write('Gate opened!').
+	write('Opened!').
 
 invalid_object(Object) :-
     not(in_inventory(Object)),
@@ -158,6 +224,14 @@ act([go, to, Where]) :-
 
 act([open, Door, with, Object]) :-
     open(Door, Object),
+    !.
+
+act([kill, Target, with, Object]) :-
+    kill(Object, Target),
+    !.
+
+act([show, inventory]) :-
+    inventory,
     !.
 
 act([stop]) :-
