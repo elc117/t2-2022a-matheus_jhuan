@@ -31,7 +31,16 @@ jereusa(Stimuli, Response) :-
     match(InternalResponse, Response),
     !.
 
+jereusa_2(Stimuli, Response) :-
+    template(InternalStimuli, InternalResponse),
+    match(InternalStimuli, Stimuli),
+    match(InternalResponse, ListResponse),
+    atomic_list_concat(ListResponse, ' ', Response),
+    !.
 
+linda(Stimuli, Response) :-
+    atomic_list_concat(Atomos, ' ', Stimuli),
+    jereusa(Atomos, Response).
 
 		
 template([s([quantos, anos, voce]),s(X), s(_)], [w(eu),s(Y), w(18) ,w(anos)]) :-
