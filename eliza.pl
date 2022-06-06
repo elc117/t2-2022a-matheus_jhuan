@@ -5,10 +5,10 @@
 
 /** <exemplos>
 
-?- jereusa([eu, amo, voce, jereusa], Response).
-?- jereusa([quais, sao, minhas, musicas, favoritas], Response).
-?- jereusa([mora, comigo, jereusa], Response).
-?- jereusa([o, que, voce, faz, jereusa], Response).
+?- jereusa('eu amo voce jereusa', Response).
+?- jereusa('quais sao nossas musicas favoritas', Response).
+?- jereusa('mora comigo jereusa', Response).
+?- jereusa('o que voce faz jereusa', Response).
 ?- jereusa('o que voce odeia jereusa', Response).
 
 */
@@ -47,6 +47,8 @@ template([s([o, que, voce]),s(X), s(_)], [w(eu),s(Y),s(W)]) :-
 template([s(X),s(Z), s(_)], [s(Y),s(W),w(sim)]) :-
     verbos(X,Y),
     	respostas(Z,W).
+template([w(eu),s(X),w(voce), w(jereusa)], [s([eu]),s(X),w(você),w(tambem), w(NomeNovo)]) :-
+    nome(NomeNovo). 
 template([w(eu),s(X),w(voce)], [s([porque,voce]),w(me), s(Y),w('?')]) :-
     verbos(X, Y).
 template([w(quais),s(X),s(Y)], [s(X),s(Y), w(':'), s(W)]) :-
@@ -61,8 +63,7 @@ template([w(eu), s(Y), s(X)], [s([porque, você]), s(K), s(Z),w('?')]) :-
     	verbos(X,Z).
 template([w(eu), s(X), s(Y)], [s([porque, você]), s(Z), s(Y),w('?')]) :-
     verbos(X,Z).
-template([w(eu),s(X),w(voce), w(jereusa)], [s([eu]),s(X),w(você),w(tambem), w(NomeNovo)]) :-
-    nome(NomeNovo). 
+
 
     
    
@@ -115,4 +116,7 @@ pronome([te], [me]).
 respostas(X, Y) :- palavra(X, Y).
 verbos(X,Y) :- verbo(X,Y).
 pronomes(X,Y) :- pronome(X,Y).
+
+%faz write pra juntar listas
+
 
