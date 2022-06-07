@@ -1,6 +1,6 @@
 /*
  * Adventure game
- * Fonte: https://www.cs.auckland.ac.nz/~j-hamer/07.363/explore.html
+ * Fonte de inspiração: https://www.cs.auckland.ac.nz/~j-hamer/07.363/explore.html
  * 
  */
 
@@ -252,11 +252,6 @@ act([get, Object]) :-
     get_object(Object),
     !.
 
-act([help]) :-
-    findall(Action, act(Action), Actions),
-    write(Actions),
-    !.
-
 act(_) :-
     write('Invalid action').
 
@@ -274,4 +269,5 @@ loop :-
   	loop.
 
 start :-
+    write('Get the egg'), nl,
     loop.
