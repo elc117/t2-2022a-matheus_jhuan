@@ -1,6 +1,7 @@
 %%  eliza(+Stimuli, -Response) is det.
 %   @param  Stimuli is a list of atoms (words).
 %   @author Richard A. O'Keefe (The Craft of Prolog)
+%   https://swish.swi-prolog.org/example/eliza.pl
 
 
 /** <exemplos>
