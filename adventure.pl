@@ -200,7 +200,7 @@ try_open(_, Current, Destination) :-
 open(Destination, _) :-
     player_location(Current),
     not(is_connected(Current, Destination)),
-    write('This door doesn\'t exists'),
+    write('This door doesn\'t exist'),
     !.
 
 open(Destination, _) :-
