@@ -11,6 +11,7 @@
 ?- jereusa('mora comigo jereusa', Response).
 ?- jereusa('o que voce faz jereusa', Response).
 ?- jereusa('o que voce odeia jereusa', Response).
+?- jereusa('quais as estacoes do ano', Response).
 
 */
 
