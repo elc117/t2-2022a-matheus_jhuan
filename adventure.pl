@@ -241,10 +241,6 @@ ask_to_leave(Creature) :-
 
 /*Adicionar aqui o predicado para pedir que a criatura deixe o local, utilizando ask_to_leave(Creature)*/
 
-act([can, you, leave, Creature, ?]) :-
-    ask_to_leave(Creature),
-    !.
-
 act([go, to, Where]) :-
     goto(Where),
     !.
