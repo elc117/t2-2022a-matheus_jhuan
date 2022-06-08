@@ -6,7 +6,7 @@
 
 :- dynamic object_location/2.
 object_location(egg, pen).
-object_location(bazooka, yard).
+object_location(bazooka, woods).
 object_location(key, house).
 
 :- dynamic player_location/1.
@@ -51,7 +51,7 @@ write_area(Current, LocationToWrite) :-
 write_area(Current, LocationToWrite) :-
     is_connected(Current, LocationToWrite),
     creature_location(Creature, LocationToWrite),
-    write(Creature), write(' is in '), write(LocationToWrite), nl, !.
+    write('The '), write(Creature), write(' is blocking the entrance to the '), write(LocationToWrite), nl, !.
 
 write_area(Current, LocationToWrite) :-
     is_connected(Current, LocationToWrite),
@@ -217,6 +217,33 @@ open(Destination, Object) :-
     !.
 
 :- dynamic stopped/0.
+
+ask_to_leave(Creature) :-
+    player_location(PlayerLocation),
+    creature_location(Creature, L),
+    not(can_reach(PlayerLocation, L)),
+    write('It can\'t hear you'),
+    nl,
+    !.
+
+ask_to_leave(Creature) :-
+    not(creature_location(Creature, _)),
+    write(Creature),
+    write(' is not around'),
+    nl,
+    !.
+
+ask_to_leave(Creature) :-
+    creature_location(Creature, L),
+    retract(creature_location(Creature, L)),
+    write('The '), write(Creature), write(' leaves, as requested'),
+    nl.
+
+/*Adicionar aqui o predicado para pedir que a criatura deixe o local, utilizando ask_to_leave(Creature)*/
+
+act([can, you, leave, Creature, ?]) :-
+    ask_to_leave(Creature),
+    !.
 
 act([go, to, Where]) :-
     goto(Where),
