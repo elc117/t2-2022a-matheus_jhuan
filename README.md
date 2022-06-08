@@ -20,7 +20,7 @@ Adventure Game: https://www.cs.auckland.ac.nz/~j-hamer/07.363/explore.html
    > eliza('eu te amo', Response).
    ?- Response = ['eu também te amo'].
    ```
-   ou
+   e
    ```
    > eliza('eu te odeio', Response).
    ?- Response = ['eu também te odeio'].
