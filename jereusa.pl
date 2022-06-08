@@ -52,7 +52,7 @@ template([s(X),s(Z), s(_)], [s(Y),s(W),w(sim)]) :-
     	respostas(Z,W).
 template([w(eu),s(X),w(voce), w(jereusa)], [s([eu]),s(X),w(você),w(tambem), w(NomeNovo)]) :-
     nome(NomeNovo). 
-template([w(eu),s(X),w(voce)], [s([porque,voce]),w(me), s(Y),w('?')]) :-
+template([w(eu),s(X),w(voce)], [s([por, que,voce]),w(me), s(Y),w('?')]) :-
     verbos(X, Y).
 template([w(quais),s(X),s(Y)], [s(X),s(Y), w(':'), s(W)]) :-
     respostas(Y,W).
@@ -61,10 +61,10 @@ template([w(_),s(X),s(Y), s(K)], [s(X),s(Y),s(K), w(':'), s(W)]) :-
 template([w(_),s(X),s(Y), s(K)], [s(C),s(Y),s(K), w(':'), s(W)]) :-
     respostas(Y,W),
     	pronomes(X,C).
-template([w(eu), s(Y), s(X)], [s([porque, você]), s(K), s(Z),w('?')]) :-
+template([w(eu), s(Y), s(X)], [s([por, que, você]), s(K), s(Z),w('?')]) :-
     pronomes(Y,K),
     	verbos(X,Z).
-template([w(eu), s(X), s(Y)], [s([porque, você]), s(Z), s(Y),w('?')]) :-
+template([w(eu), s(X), s(Y)], [s([por, que, você]), s(Z), s(Y),w('?')]) :-
     verbos(X,Z).
 
 
