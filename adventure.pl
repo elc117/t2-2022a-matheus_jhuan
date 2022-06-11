@@ -61,8 +61,8 @@ player_can_see_creature(Creature) :-
 
 move_to(Destination) :-
     player_location(Current),
-    not(creature_location(_, Destination)),
   	can_reach(Current, Destination),
+    \+ creature_location(_, Destination),
   	retract(player_location(Current)),
   	assert(player_location(Destination)).
 
@@ -248,7 +248,7 @@ read_atoms(Atoms) :-
     atomic_list_concat(Atoms, ' ', A).
 
 loop :- stopped,!.
-loop :- in_inventory(egg), write('Congratulations, you won!'), nl, !.
+loop :- won, write('Congratulations, you won!'), nl, !.
 loop :-
   	prompt(_, 'Type an action...'),
   	read_atoms(Action),
@@ -263,3 +263,35 @@ stop :-
     assert(stopped),
     write('Goodbye!'),
     nl.
+
+won :-
+    in_inventory(egg).
+
+repeatsAtEnd(List, Sublist) :-
+    append(Aux, Sublist , List),
+    append(_, Sublist, Aux).
+
+anyRepeatsAtEnd(List) :-
+    repeatsAtEnd(List, SubList),
+    length(SubList, Length),
+    Length > 0,
+    !.
+
+alwaysWin_(_, _) :-
+    won,
+    !.
+
+alwaysWin_([Move|MoveSet], PreviousMoves) :-
+    act(Move),
+    append(PreviousMoves, [Move], CurrentMoves),
+    not(anyRepeatsAtEnd(CurrentMoves)),
+    alwaysWin_(MoveSet, CurrentMoves).
+    
+    
+alwaysWin(MoveSet) :-
+    alwaysWin_(MoveSet, []).
+
+
+
+
+
