@@ -44,7 +44,7 @@ Adventure Game: https://www.cs.auckland.ac.nz/~j-hamer/07.363/explore.html
    ].
    ```
    Predicados úteis que podem ser utilizados:
-      - act(Action, State, NextState) -> verifica se a ação Action leva do estado State para o estado NextState.
+      - act(Action, State, NextState) -> verifica se a ação Action é válida para o estado State, e leva do estado State para o estado NextState.
       - won(State) -> verifica se no estado State o jogador venceu.
       - initial_state(State) -> unifica State com o estado inicial do jogo.
 
