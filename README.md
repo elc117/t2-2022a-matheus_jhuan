@@ -26,4 +26,26 @@ Adventure Game: https://www.cs.auckland.ac.nz/~j-hamer/07.363/explore.html
    ?- Response = ['eu também te odeio'].
    ```
    
-2. A partir do código em [adventure.pl](https://github.com/elc117/t2-2022a-matheus_jhuan/blob/main/adventure.pl), faça com que seja possível que o jogador peça para que o zumbi abra caminho para o objetivo, ao invés de matá-lo. Foi criado um predicado 'ask_to_leave(Creature)' que pode ser utilizado.
+2. A partir do código em [adventure.pl](https://github.com/elc117/t2-2022a-matheus_jhuan/blob/main/adventure.pl), faça um predicado que retorne uma sequência de ações que resultam em vitória. Por exemplo:
+   ```
+   > win(Actions).
+   ?- Response = [
+      [get, key],
+      [open, yard, with, key],
+      [go, to, yard],
+      [open, woods, with, key],
+      [go, to, woods],
+      [get, bazooka],
+      [go, to, yard],
+      [open, pen, with, bazooka],
+      [kill, zombie, with, bazooka],
+      [go, to, pen],
+      [get, egg]
+   ].
+   ```
+   Predicados úteis que podem ser utilizados:
+      - act(Action, State, NextState) -> verifica se a ação Action leva do estado State para o estado NextState.
+      - won(State) -> verifica se no estado State o jogador venceu.
+      - initial_state(State) -> unifica State com o estado inicial do jogo.
+
+   Tome cuidado para que o programa não caia em um loop infinito, como ficar se movimentando apenas entre o jardim e a casa, por exemplo.
