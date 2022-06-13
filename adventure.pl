@@ -4,9 +4,7 @@
  * 
  */
 
-/*Game state and rules*/
-
-:- debug.
+/*Game state and basic rules*/
 
 initial_state(State) :-
     State = state{
@@ -33,9 +31,7 @@ can_kill_creature(bazooka).
 
 is_connected(A, B) :-
     connected(B, A);
-    connected(A,B).
-
-:- dynamic stopped/0.
+    connected(A, B).
 
 creature_at_location((_, Location), Location).
 
@@ -43,16 +39,24 @@ any_creature_at_location(Creatures, Location) :-
     member(Creature, Creatures),
     creature_at_location(Creature, Location).
 
-is_closed(A, B, LockedDoors) :-
+is_locked(A, B, LockedDoors) :-
     member((A, B), LockedDoors), !.
-is_closed(A, B, LockedDoors) :-
+is_locked(A, B, LockedDoors) :-
     member((B, A), LockedDoors).
 
 can_reach(A, B, LockedDoors) :-
     is_connected(A, B),
-    not(is_closed(A, B, LockedDoors)).
+    not(is_locked(A, B, LockedDoors)).
+
+unlock(A, B, LockedDoors, NextUnlockedDoors) :-
+    member((A, B), LockedDoors),
+    delete(LockedDoors, (A, B), NextUnlockedDoors),
+    !.
+
+unlock(A, B, LockedDoors, NextUnlockedDoors) :-
+    delete(LockedDoors, (B, A), NextUnlockedDoors).
     
-/*Base action predicates*/
+/*Base checking predicates*/
 
 can_move_to(Destination, PlayerLocation, Creatures, LockedDoors) :-
   	can_reach(PlayerLocation, Destination, LockedDoors),
@@ -62,7 +66,7 @@ can_open(Destination, PlayerLocation, Object, Inventory, LockedDoors) :-
     member(Object, Inventory),
     can_open_a_door(Object),
     is_connected(PlayerLocation, Destination),
-    is_closed(PlayerLocation, Destination, LockedDoors).
+    is_locked(PlayerLocation, Destination, LockedDoors).
 
 can_get_object(Object, PlayerLocation, ObjectsInWorld) :-
     member((Object, PlayerLocation), ObjectsInWorld).
@@ -77,21 +81,14 @@ can_ask_to_leave(PlayerLocation, Creature, Creatures, LockedDoors) :-
     member((Creature, CreatureLocation), Creatures),
     can_reach(PlayerLocation, CreatureLocation, LockedDoors).
 
+/*Base action predicates*/
 move_to(Destination, State, NextState) :-
     can_move_to(Destination, State.player, State.creatures, State.locked_doors),
     NextState = State.put(player, Destination).
 
-remove_unordered(A, B, List, Result) :-
-    member((A, B), List),
-    delete(List, (A, B), Result),
-    !.
-
-remove_unordered(A, B, List, Result) :-
-    delete(List, (B, A), Result).
-
 do_open(Door, Object, State, NextState) :-
     can_open(Door, State.player, Object, State.inventory, State.locked_doors),
-    remove_unordered(Door, State.player, State.locked_doors, NextLockedDoors),
+    unlock(Door, State.player, State.locked_doors, NextLockedDoors),
     NextState = State.put(locked_doors, NextLockedDoors).
 
 get_object(Object, State, NextState) :-
@@ -110,7 +107,7 @@ ask_to_leave(Target, State, NextState) :-
     can_ask_to_leave(State.player, Target, State.creatures, State.locked_doors),
     delete(State.creatures, (Target, _), NextCreatures),
     NextState = State.put(creatures, NextCreatures).
-    
+
 act([go, to, Where], CurrentState, NextState) :- move_to(Where, CurrentState, NextState).
 act([open, Door, with, Object], CurrentState, NextState) :- do_open(Door, Object, CurrentState, NextState).
 act([get, Object], CurrentState, NextState) :- get_object(Object, CurrentState, NextState).
@@ -119,7 +116,7 @@ act([can, you, leave, Creature], CurrentState, NextState) :- ask_to_leave(Creatu
 
 /*I/O action predicates*/
 write_area(Current, LocationToWrite, State) :-
-    is_closed(Current, LocationToWrite, State.locked_doors),
+    is_locked(Current, LocationToWrite, State.locked_doors),
     write(LocationToWrite), write(' [locked]'), nl,
     !.
 write_area(Current, LocationToWrite, State) :-
@@ -185,7 +182,7 @@ io_move_to(Destination, State, State) :-
   	write('You can\'t find this place.'), nl,
     !.
 io_move_to(Destination, State, State) :-
-    is_closed(State.player, Destination, State.locked_doors),
+    is_locked(State.player, Destination, State.locked_doors),
     write('The door is closed'), nl,
     !.
 io_move_to(Destination, State, State) :-
@@ -220,7 +217,7 @@ io_open(Destination, _, State, State) :-
     write('This door doesn\'t exist'),
     !.
 io_open(Destination, _, State, State) :-
-    not(is_closed(State.player, Destination, State.locked_doors)),
+    not(is_locked(State.player, Destination, State.locked_doors)),
     write('This door is already opened'),
     !.
 io_open(_, Object, State, State) :-
@@ -256,6 +253,8 @@ read_atoms(Atoms) :-
     atom_codes(A, Cs),
     atomic_list_concat(Atoms, ' ', A).
 
+:- dynamic stopped/0.
+
 loop(_) :- stopped,!.
 loop(State) :- won(State), write('Congratulations, you won!'), nl, !.
 loop(State) :-
@@ -277,17 +276,3 @@ stop :-
 won(State) :-
     member(egg, State.inventory).
 
-alwaysWin_([], _, State) :-
-    won(State),
-    !.
-
-alwaysWin_([Move|MoveSet], PreviousStates, State) :-
-    act(Move, State, NextState),
-    append(PreviousStates, [State], States),
-    not(member(NextState, States)),
-    alwaysWin_(MoveSet, States, NextState).
-
-
-alwaysWin(MoveSet) :-
-    initial_state(State),
-    alwaysWin_(MoveSet, [], State).
